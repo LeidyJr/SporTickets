@@ -1,0 +1,66 @@
+{% extends 'base/tables.html' %}
+{% load bootstrap4 %}
+{% block title %} Lista de eventos {% endblock %}
+
+{% block content %}
+<!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <br/>
+          <h1 class="h3 mb-2 text-gray-800">Lista de eventos</h1>
+          <br/>
+          <!-- DataTales Example -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Lista de eventos</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Categoria</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Hora</th>
+                            <th scope="col">Lugar</th>
+                            <th scope="col">URL</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% if object_list %}
+                        {% for evento in object_list %}
+                        <tr class="table-primary">
+                            <td>{{ evento.id }}</td>
+                            <td>{{ evento.name }}</td>
+                            <td>{{ evento.event_type }}</td>
+                            <td>{{ evento.description }}</td>
+                            <td>{{ evento.event_date }}</td>
+                            <td>{{ evento.event_time }}</td>
+                            <td>{{ evento.event_place }}</td>
+                            <td>{{ evento.event_url }}</td>
+                            <td>{{ evento.event_status }}</td>
+                            <td>
+                                <a class="btn btn-info" href="{% url 'eventos:locations' evento.id %}">Localidades</a>
+                                <a class="btn btn-warning" href="{% url 'eventos:update_event' evento.id %}">Editar</a>
+                                <a class="btn btn-danger" href="{% url 'eventos:delete_event' evento.id %}">Eliminar</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                    <h1> No hay eventos </h1>
+                    {% endif %}
+                    </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- /.container-fluid -->
+{% endblock %}

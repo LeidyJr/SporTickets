@@ -1,0 +1,15 @@
+{% extends 'base/base.html' %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+{% block title %} Crear evento {% endblock %}
+{% block content %}
+<form method="post">
+	{% csrf_token %}
+	{% bootstrap_form form %}
+
+	<a href="#" class="btn btn-info">Comprar</a>
+	<button type="submit" class="btn btn-success">Guardar</button>
+</form>
+{% endblock %}
