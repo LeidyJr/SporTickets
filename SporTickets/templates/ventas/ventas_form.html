@@ -5,11 +5,30 @@
 {{ form.media }}
 {% block title %} Crear evento {% endblock %}
 {% block content %}
-<form method="post">
-	{% csrf_token %}
-	{% bootstrap_form form %}
-
-	<a href="#" class="btn btn-info">Comprar</a>
-	<button type="submit" class="btn btn-success">Guardar</button>
-</form>
+<div class="row">
+	<div class="col-lg-4">
+		<div class="card shadow mb-4">
+			<div class="card-header py-3">
+					<h6 class="m-0 font-weight-bold text-primary">Comprar boletos</h6>
+			</div>
+			<div class="card-body">
+			     <form method="post">
+					{% csrf_token %}
+					{% bootstrap_form form %}
+					<button type="submit" class="btn btn-info">Seleccionar</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-8">
+	<div class="card shadow mb-4">
+		<div class="card-header py-3">
+				<h6 class="m-0 font-weight-bold text-primary">Resumen de compra </h6>
+		</div>
+		<div class="card-body">
+		     <h6>Acá van los boletos q ha seleccionado</h6>
+		</div>
+	</div>
+</div>
+</div>
 {% endblock %}

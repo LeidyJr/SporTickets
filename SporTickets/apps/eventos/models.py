@@ -27,6 +27,7 @@ class Event(models.Model):
     event_url = models.URLField(max_length=100, blank=True)
     event_status = models.CharField(max_length=20, choices=STATUS, default= 'Activo')
     event_type= models.ForeignKey(EventType, related_name="eventos_del_tipo", on_delete=models.CASCADE)
+    #event_type.eventos_del_tipo = Todos los eventos de ese tipo de evento
 
     class Meta:
 
@@ -40,6 +41,7 @@ class Location(models.Model):
 
     name = models.CharField(max_length=100, verbose_name="Location's name")
     event_type = models.ForeignKey(EventType,related_name="localidades_del_tipo",verbose_name="Event type", on_delete=models.CASCADE)
+    ##event_type.localidades_del_tipo = Todas las localidades de ese tipo de evento
 
     def __str__(self): 
         return (self.name)
@@ -50,7 +52,9 @@ class Location(models.Model):
 class EventLocation(models.Model):
 
     event = models.ForeignKey(Event, related_name="evento_localidades_del_evento", on_delete=models.CASCADE)
+    #event.evento_localidades_del_evento = Todos los registros de EventLocation asociados a ese evento
     location = models.ForeignKey(Location, related_name="evento_localidades_de_localidades", on_delete=models.CASCADE)
+    #event.evento_localidades_de_localidades = Todos los registros de EventLocation asociados a esa localidad
     capacity = models.IntegerField()    
     price = models.IntegerField()
     availability = models.IntegerField()

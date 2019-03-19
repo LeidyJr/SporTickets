@@ -20,11 +20,11 @@
             <div class="card-body">
 				<form method="post">{% csrf_token %}
 					<div class="row">
-						{% for localidad, form in formsetlocations %}
+						{% for locations, form in formsetlocations %}
 							<div class="col-sm-6 col-md-4 col-lg-3">
 								<div class="card shadow mb-4">
 									<div class="card-header py-3">
-										<h6 class="m-0 font-weight-bold text-primary">Localidad {{localidad.name}} del evento: {{event}}.</h6>
+										<h6 class="m-0 font-weight-bold text-primary">Localidad {{locations}} del evento: {{event}}.</h6>
 									</div>
 									<div class="card-body">
 										{% bootstrap_form form %}
@@ -32,10 +32,10 @@
 								</div>
 							</div>
 						{% endfor %}	
+						
 					</div>
 					{{ formset.management_form }}
 				    <button type="submit" class="btn btn-success">Agregar a la compra</button>
-				    <a href="{% url 'eventos:list_event' %}" class="btn btn-primary">Volver</a>
 				</form>
 			</div>
 		</div>

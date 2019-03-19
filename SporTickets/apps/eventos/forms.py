@@ -1,6 +1,9 @@
 from django import forms
-from apps.eventos.models import EventType, Event, Location, EventLocation #Llamo al modelo que se va a utilizar
-from bootstrap_datepicker_plus import DatePickerInput
+from django.core.exceptions import ValidationError
+from bootstrap_datepicker_plus import DatePickerInput, TimePickerInput
+import datetime
+
+from apps.eventos.models import EventType, Event, Location, EventLocation 
 
 class EventForm(forms.ModelForm):
 
@@ -24,11 +27,20 @@ class EventForm(forms.ModelForm):
 		}
 		widgets = {
 		"event_date" : DatePickerInput(),
+		"event_time" : TimePickerInput(),
 		}
 
 	def __init__(self, *args, **kwargs):
 		super(EventForm, self).__init__(*args, **kwargs)
         #self.fields['imagen'].required = False
+
+	def clean_event_date(self):
+		data = self.cleaned_data.get('event_date', '')
+		date_aux_str = self.data['event_date']
+		date_aux = datetime.datetime.strptime(date_aux_str, '%d-%m-%Y')
+		if not date_aux > datetime.datetime.now():
+			raise ValidationError("La fecha del evento debe ser mayor a la fecha actual")
+		return data
 
 
 class EventLocationForm(forms.ModelForm):
