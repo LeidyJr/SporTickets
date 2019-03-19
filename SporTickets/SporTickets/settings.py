@@ -37,11 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'apps.usuarios',
     'apps.eventos',
     'apps.ventas',
     'apps.boletos',
     'bootstrap4',
     'bootstrap_datepicker_plus',
+
 ]
 
 MIDDLEWARE = [
@@ -81,9 +83,9 @@ WSGI_APPLICATION = 'SporTickets.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'SporTickets',
-        'USER': 'sportickets',
-        'PASSWORD': 'leidy',
+        'NAME': 'AWRI_Proyecto',
+        'USER': 'postgres',
+        'PASSWORD': '1628950',
         'HOST': 'localhost',
         'PORT': '5432',
     }
