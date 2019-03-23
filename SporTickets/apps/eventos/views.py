@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.urls import reverse_lazy
@@ -7,6 +8,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.db import IntegrityError
 from django.forms import modelformset_factory
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
 from apps.eventos.forms import EventForm, EventLocationForm
@@ -15,10 +17,11 @@ from apps.boletos.models import Ticket
 from apps.ventas.models import Sale
 # Create your views here.
 
+@login_required
 def index(request):
     return render(request, 'eventos/index.html')
 
-class EventCreate(SuccessMessageMixin, CreateView):
+class EventCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Event
     form_class = EventForm
     template_name = "eventos/eventos_form.html"
@@ -34,7 +37,7 @@ class EventCreate(SuccessMessageMixin, CreateView):
             name=self.object.name,
         )
 
-class EventList(ListView):
+class EventList(LoginRequiredMixin, ListView):
     model = Event
     template_name = 'eventos/eventos_list.html'
     queryset = Event.objects.all()
@@ -42,18 +45,19 @@ class EventList(ListView):
     #paginate_by = 2
 
 
-class EventUpdate(UpdateView):
+class EventUpdate(LoginRequiredMixin, UpdateView):
     model = Event
     form_class = EventForm
     template_name = 'eventos/eventos_form.html'
     success_message = "El evento %(name)s se modificó correctamente."
     success_url = reverse_lazy('eventos:list_event')
 
-class EventDelete(DeleteView):
+class EventDelete(LoginRequiredMixin, DeleteView):
     model = Event
     template_name = 'eventos/eventos_delete.html'
     success_url = reverse_lazy('eventos:list_event')
 
+@login_required
 def EventLocationManage(request, id_evento):
     event = get_object_or_404(Event, pk=id_evento)#Instancia de evento, pues las EventLocation se crean/modifican dependiendo del evento.
 
@@ -74,9 +78,9 @@ def EventLocationManage(request, id_evento):
                 event_location.location = localidades_del_tipo_de_evento[index] # Cada una de las localidades del tipo de evento
                 event_location.availability = event_location.capacity #La disponibilidad inicial,es igual a la capacidad
                 event_location.save()#Guarda el objeto en la BD
-                messages.success(request, 'Las localidades se registraron correctamente.')
                 index += 1
             event.save()
+            messages.success(request, 'Las localidades se registraron correctamente.')
             return redirect('eventos:list_event')
         else:
             messages.warning(request, 'Por favor verifique que todos los campos se hayan diligenciado correctamente.')

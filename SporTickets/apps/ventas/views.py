@@ -1,9 +1,13 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from apps.ventas.forms import SelectEventForm
 from django.views.generic.edit import FormView
 from django.forms import formset_factory
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib import messages
 
 from apps.eventos.forms import EventForm, EventLocationForm
 from apps.eventos.models import Event, EventLocation
@@ -11,19 +15,31 @@ from apps.boletos.models import Ticket
 from apps.ventas.models import Sale
 from apps.ventas.forms import TicketsForm
 
-class SaleView(FormView):
-    template_name = 'ventas/ventas_form.html'
-    form_class = SelectEventForm
-    success_url = reverse_lazy("eventos:locations")#cambiar
+def new_sale(request):
+    if request.method == 'POST':
+        form = SelectEventForm(request.POST)
+        if form.is_valid():
+            event = form.cleaned_data["event"]
+            event_id = event.id
+            return redirect('ventas:buy', event_id)
+    else:
+        form = SelectEventForm()
+    venta_activa = Sale.obtener_sale(request)
+    return render(request, 'ventas/ventas_form.html', {
+        'form': form,
+        'venta_activa': venta_activa,
+    })
 
-    def form_valid(self, form):
-        # This method is called when valid form data has been POSTed.
-        # It should return an HttpResponse.
-        event = form.cleaned_data["event"]
-        event_id = event.id
-        print(event_id)
-        return redirect('ventas:buy', event_id)
+def eliminar_boleto(request, id_boleto):
+    venta_activa = Sale.obtener_sale(request)
+    boleto = get_object_or_404(Ticket, pk=id_boleto)
 
+    if boleto in venta_activa.boletos_de_la_venta.all():
+        venta_activa.eliminar_boleto(boleto)
+        messages.success(request, 'Boleto eliminado exitosamente.')
+    return redirect("ventas:sale_create")
+
+@login_required
 def TicketBuyManage(request, id_evento):#Administrar la venta de boletos para un evento.
     event = get_object_or_404(Event, pk=id_evento)
 
@@ -45,13 +61,16 @@ def TicketBuyManage(request, id_evento):#Administrar la venta de boletos para un
             for form in formset:
                 event_location = listado_event_location[index]
                 cantidad = form.cleaned_data["cantidad"]
-                if event_location.availability > 0: 
+                if event_location.availability > cantidad:
+                    for _ in range(cantidad):
+                        Ticket.objects.create(sale=sale, event_location=event_location) 
                     event_location.availability -= cantidad
+                    event_location.save()
+                    
                 else:
                     print("No hay tantos boletos")
+                    messages.error(request, 'La cantidad de boletos seleccionada no está disponible. ')
                 event_location.save()
-                for _ in range(cantidad):
-                    Ticket.objects.create(sale=sale, event_location=event_location)
                 index +=1
             event.save()
             return redirect('ventas:sale_create')
@@ -69,3 +88,24 @@ def TicketBuyManage(request, id_evento):#Administrar la venta de boletos para un
         "prices": precios_localidades_del_evento,
         "disponibility": disponibilidad_localidades_del_evento
     })
+
+def finalizar_compra(request):
+    from django.db.models import Sum
+    from django.db.models.functions import Coalesce
+
+    venta_activa = Sale.obtener_sale(request)
+    boletos = venta_activa.boletos_de_la_venta.all()
+
+    subtotal = boletos.aggregate(calc_subtotal=Coalesce(Sum("event_location__price"),0))["calc_subtotal"]
+    iva = subtotal*0.19
+    total = subtotal + iva
+
+    venta_activa.subtotal = subtotal
+    venta_activa.iva = iva
+    venta_activa.total = total
+    venta_activa.finished = True
+    venta_activa.save()
+    del request.session['venta_activa']
+    messages.success(request, 'Compra realizada exitosamente.')
+    return redirect('ventas:sale_create')
+
