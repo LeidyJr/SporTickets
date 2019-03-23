@@ -1,0 +1,48 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-4">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Detalle Factura</h6>
+      </div>
+      <div class="card-body">
+        <p>Venta: {{ sale.id }}</p>
+        <p>Fecha: {{sale.date}}</p>
+        <p>Subtotal: {{sale.subtotal}}</p>
+        <p>Iva: {{sale.iva|floatformat}}</p>
+        <p><b>Total: {{sale.total}}</b></p>
+      </div>
+    </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Boletos comprados:</h6>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered dataTable" width="100%" cellspacing="0">
+              <thead>
+                  <tr>
+                      <th scope="col">Boleto</th>
+                      <th scope="col">Precio</th>
+                    </tr>
+              </thead>
+              <tbody>
+                    {% for boleto in sale.boletos_de_la_venta.all %}
+                    <tr class="table-primary">
+                        <td>{{boleto.event_location}}</td>
+                        <td>{{boleto.event_location.price}}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+            </table>
+    </div>
+        </div>
+      </div>
+
+
+
+{% endblock %}

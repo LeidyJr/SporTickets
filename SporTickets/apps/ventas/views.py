@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.urls import reverse_lazy
 from apps.ventas.forms import SelectEventForm
 from django.views.generic.edit import FormView
+from django.views.generic import DetailView
 from django.forms import formset_factory
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -14,7 +15,10 @@ from apps.eventos.models import Event, EventLocation
 from apps.boletos.models import Ticket
 from apps.ventas.models import Sale
 from apps.ventas.forms import TicketsForm
+from apps.usuarios.views import es_vendedor, es_cliente
 
+@login_required
+@es_cliente
 def new_sale(request):
     if request.method == 'POST':
         form = SelectEventForm(request.POST)
@@ -30,6 +34,8 @@ def new_sale(request):
         'venta_activa': venta_activa,
     })
 
+@login_required
+@es_cliente
 def eliminar_boleto(request, id_boleto):
     venta_activa = Sale.obtener_sale(request)
     boleto = get_object_or_404(Ticket, pk=id_boleto)
@@ -40,6 +46,7 @@ def eliminar_boleto(request, id_boleto):
     return redirect("ventas:sale_create")
 
 @login_required
+@es_cliente
 def TicketBuyManage(request, id_evento):#Administrar la venta de boletos para un evento.
     event = get_object_or_404(Event, pk=id_evento)
 
@@ -89,6 +96,8 @@ def TicketBuyManage(request, id_evento):#Administrar la venta de boletos para un
         "disponibility": disponibilidad_localidades_del_evento
     })
 
+@login_required
+@es_cliente
 def finalizar_compra(request):
     from django.db.models import Sum
     from django.db.models.functions import Coalesce
@@ -107,5 +116,17 @@ def finalizar_compra(request):
     venta_activa.save()
     del request.session['venta_activa']
     messages.success(request, 'Compra realizada exitosamente.')
-    return redirect('ventas:sale_create')
+    return redirect('ventas:factura', venta_activa.id)
 
+@login_required
+@es_cliente
+def sale_detail_view(request,pk):
+    try:
+        sale_id=Sale.objects.get(pk=pk)
+    except Sale.DoesNotExist:
+        raise Http404("Sale does not exist")
+    return render(
+        request,
+        'ventas/factura.html',
+        context={'sale':sale_id,}
+    )

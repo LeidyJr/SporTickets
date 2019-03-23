@@ -12,5 +12,6 @@ urlpatterns = [
     url(regex=r"^eliminar-boleto/(?P<id_boleto>[\w-]+)$", view=eliminar_boleto, name="eliminar_boleto"),
     url(regex=r"^finalizar-compra$", view=finalizar_compra, name="finalizar_compra"),
     url(regex=r"^buy/(?P<id_evento>[\w-]+)$", view=TicketBuyManage, name="buy"),
+    url(r'^factura/(?P<pk>\d+)/$', view=sale_detail_view, name='factura'),
 ]
 

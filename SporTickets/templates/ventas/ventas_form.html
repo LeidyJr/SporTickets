@@ -5,6 +5,7 @@
 {{ form.media }}
 {% block title %} Crear evento {% endblock %}
 {% block content %}
+<div class="card shadow mb-12">
 <div class="row">
 	<div class="col-lg-4">
 		<div class="card shadow mb-4">
@@ -56,11 +57,14 @@
 	</div>
 
 </div>
-
+<div class="col-lg-6">
+	{% if venta_activa.boletos_de_la_venta.all %}
 <a href="{% url 'ventas:finalizar_compra' %}" class="btn btn-success btn-icon-split">
-	<span class="icon text-white-50">
-		<i class="fas fa-check"></i>
-    </span>
+	<span class="icon text-white-50"><i class="fas fa-check"></i></span>
     <span class="text">Finalizar compra</span>
 </a>
+{% endif %}
+</div>
+</div>
+
 {% endblock %}
