@@ -21,8 +21,8 @@ from django.contrib.auth import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('events/', include ('apps.eventos.urls', namespace='eventos')),
-    path('sales/', include ('apps.ventas.urls', namespace='ventas')),
+    path('eventos/', include ('apps.eventos.urls', namespace='eventos')),
+    path('ventas/', include ('apps.ventas.urls', namespace='ventas')),
 
 
     path('login/', views.LoginView.as_view(), name='login'),

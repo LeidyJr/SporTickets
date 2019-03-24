@@ -27,3 +27,4 @@ def es_gerente(function):
         else:
             return redirect('login')
     return wrap
+

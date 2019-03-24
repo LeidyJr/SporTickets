@@ -44,20 +44,20 @@
 
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
-
+      {% if request.user.es_vendedor %}
       <!-- Nav Item - Dashboard -->
       <li class="nav-item">
-        <a class="nav-link" href="/events/index">
+        <a class="nav-link" href="{% url 'eventos:index' %}">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Tablero de control</span></a>
       </li>
-
+      {% endif %}
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item">
-        <a class="nav-link" href="/sales/create">
+        <a class="nav-link" href="{% url 'ventas:nueva_compra' %}">
           <i class="fas fa-comment-dollar"></i>
           <span>Ventas</span></a>
       </li>
@@ -72,8 +72,8 @@
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item" href="/events/list">Listado de eventos</a>
-            <a class="collapse-item" href="/events/create">Registrar</a>
+            <a class="collapse-item" href="{% url 'eventos:listado_de_eventos' %}">Listado de eventos</a>
+            <a class="collapse-item" href="{% url 'eventos:registrar_evento' %}">Registrar</a>
           </div>
         </div>
       </li>

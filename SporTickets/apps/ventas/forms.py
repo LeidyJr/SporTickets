@@ -1,21 +1,22 @@
 from django import forms
 
-from apps.ventas.models import Sale
-from apps.eventos.models import EventType, Event, Location, EventLocation
-from apps.boletos.models import Ticket
+from apps.ventas.models import Venta
+from apps.eventos.models import TipoEvento, Evento, Localidad, LocalidadesEvento
+from apps.boletos.models import Boleto
+from apps.usuarios.models import User
 
-class SelectEventForm(forms.Form):
-    event = forms.ModelChoiceField(queryset = Event.objects.all().filter(event_status='Activo'))
-
+class SeleccionarEventoForm(forms.Form):
+    evento = forms.ModelChoiceField(queryset = Evento.objects.all().filter(estado='Activo'))
     def clean_price(self):
-        data = self.cleaned_data.get('event')
-        return event
+        data = self.cleaned_data.get('evento')
+        return evento
 
-class TicketsForm(forms.Form):
+
+class CantidadForm(forms.Form):
 
 	 cantidad = forms.IntegerField(label='Cantidad: ', initial =0)
 
-	 def __init__(self, *args, event, **kwargs):
-	 	self.event = event
-	 	super(TicketsForm, self).__init__(*args, **kwargs)
+	 def __init__(self, *args, evento, **kwargs):
+	 	self.evento = evento
+	 	super(CantidadForm, self).__init__(*args, **kwargs)
 

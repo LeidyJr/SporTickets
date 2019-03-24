@@ -3,14 +3,14 @@
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
 {{ form.media }}
-{% block title %} Compra de boletos  {% endblock %}
+{% block title %} Venta de boletos {% endblock %}
 {% block content %}
 <div class="card shadow mb-12">
 <div class="row">
 	<div class="col-lg-4">
 		<div class="card shadow mb-4">
 			<div class="card-header py-3">
-					<h6 class="m-0 font-weight-bold text-primary">Comprar boletos</h6>
+					<h6 class="m-0 font-weight-bold text-primary">Vender boletos</h6>
 			</div>
 			<div class="card-body">
 			     <form method="post">
@@ -21,10 +21,24 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-lg-6">
+	<div class="col-lg-4">
 		<div class="card shadow mb-4">
 			<div class="card-header py-3">
-					<h6 class="m-0 font-weight-bold text-primary">Boletos a comprar:</h6>
+					<h6 class="m-0 font-weight-bold text-primary">Seleccionar cliente</h6>
+			</div>
+			<div class="card-body">
+			     <form method="post">
+					{% csrf_token %}
+					{% bootstrap_form form %}
+					<button type="submit" class="btn btn-info">Seleccionar</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-4">
+		<div class="card shadow mb-4">
+			<div class="card-header py-3">
+					<h6 class="m-0 font-weight-bold text-primary">Boletos a vender:</h6>
 			</div>
 			<div class="card-body">
 				<div class="table-responsive">
@@ -40,8 +54,8 @@
 	                    {% if venta_activa.boletos_de_la_venta.all %}
 	                        {% for boleto in venta_activa.boletos_de_la_venta.all %}
 	                        <tr class="table-primary">
-	                            <td>{{boleto.localidades_evento}}</td>
-	                            <td>{{boleto.localidades_evento.precio}}</td>
+	                            <td>{{boleto.event_location}}</td>
+	                            <td>{{boleto.event_location.price}}</td>
 	                            <td><a href="{% url 'ventas:eliminar_boleto' boleto.id %}" class="btn btn-danger btn-circle btn-lg">
 	                    		<i class="fas fa-trash"></i></a></td>
 	                    	</tr>

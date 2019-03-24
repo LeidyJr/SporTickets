@@ -8,11 +8,11 @@
           <h6 class="m-0 font-weight-bold text-primary">Detalle Factura</h6>
       </div>
       <div class="card-body">
-        <p>Venta: {{ sale.id }}</p>
-        <p>Fecha: {{sale.date}}</p>
-        <p>Subtotal: {{sale.subtotal}}</p>
-        <p>Iva: {{sale.iva|floatformat}}</p>
-        <p><b>Total: {{sale.total}}</b></p>
+        <p>Venta: {{ venta.id }}</p>
+        <p>Fecha: {{venta.fecha}}</p>
+        <p>Subtotal: {{venta.subtotal}}</p>
+        <p>Iva: {{venta.iva|floatformat}}</p>
+        <p><b>Total: {{venta.total}}</b></p>
       </div>
     </div>
     </div>
@@ -31,10 +31,10 @@
                     </tr>
               </thead>
               <tbody>
-                    {% for boleto in sale.boletos_de_la_venta.all %}
+                    {% for boleto in venta.boletos_de_la_venta.all %}
                     <tr class="table-primary">
-                        <td>{{boleto.event_location}}</td>
-                        <td>{{boleto.event_location.price}}</td>
+                        <td>{{boleto.localidades_evento}}</td>
+                        <td>{{boleto.localidades_evento.precio}}</td>
                   </tr>
                   {% endfor %}
                 </tbody>

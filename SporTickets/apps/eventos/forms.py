@@ -3,54 +3,54 @@ from django.core.exceptions import ValidationError
 from bootstrap_datepicker_plus import DatePickerInput, TimePickerInput
 import datetime
 
-from apps.eventos.models import EventType, Event, Location, EventLocation 
+from apps.eventos.models import TipoEvento, Evento, Localidad, LocalidadesEvento 
 
-class EventForm(forms.ModelForm):
+class EventoForm(forms.ModelForm):
 
-	event_date = forms.DateField(
+	fecha = forms.DateField(
         widget=DatePickerInput(format='%d-%m-%Y'),
         input_formats = ['%d-%m-%Y']
     )
 
 	class Meta:
-		model = Event
-		fields = ("name" , "description", "event_date", "event_time", "event_place","event_url", "event_status","event_type", )
+		model = Evento
+		fields = ("nombre" , "descripcion", "fecha", "hora", "lugar","url", "estado","tipo_de_evento", )
 		labels = {
-		"name": "Nombre: ",
-		"description": "Descripción: ", 
-		"event_date": "Fecha: ",
-		"event_time": "Hora: ",
-		"event_place": "Lugar: ",
-		"event_url": "Url: ",
-		"event_status": "Estado: ", 
-		"event_type": "Tipo de evento: "
+		"nombre": "Nombre: ",
+		"descripcion": "Descripción: ", 
+		"fecha": "Fecha: ",
+		"hora": "Hora: ",
+		"lugar": "Lugar: ",
+		"url": "Url: ",
+		"estado": "Estado: ", 
+		"tipo_de_evento": "Tipo de evento: "
 		}
 		widgets = {
-		"event_date" : DatePickerInput(),
-		"event_time" : TimePickerInput(),
+		"fecha" : DatePickerInput(),
+		"hora" : TimePickerInput(),
 		}
 
 	def __init__(self, *args, **kwargs):
-		super(EventForm, self).__init__(*args, **kwargs)
+		super(EventoForm, self).__init__(*args, **kwargs)
         #self.fields['imagen'].required = False
 
 	def clean_event_date(self):
-		data = self.cleaned_data.get('event_date', '')
-		date_aux_str = self.data['event_date']
+		data = self.cleaned_data.get('fecha', '')
+		date_aux_str = self.data['fecha']
 		date_aux = datetime.datetime.strptime(date_aux_str, '%d-%m-%Y')
 		if not date_aux > datetime.datetime.now():
 			raise ValidationError("La fecha del evento debe ser mayor a la fecha actual")
 		return data
 
 
-class EventLocationForm(forms.ModelForm):
+class LocalidadesEventoForm(forms.ModelForm):
 
-	def __init__(self, *args, event, **kwargs):
-		self.event = event
-		super(EventLocationForm, self).__init__(*args, **kwargs)
+	def __init__(self, *args, evento, **kwargs):
+		self.evento = evento
+		super(LocalidadesEventoForm, self).__init__(*args, **kwargs)
 
 	class Meta:
 
-		model = EventLocation
-		fields = ("capacity","price")
-		labels = {"capacity" : "Capacidad: ", "price" : "Precio: ", }
+		model = LocalidadesEvento
+		fields = ("capacidad","precio")
+		labels = {"capacidad" : "Capacidad: ", "precio" : "Precio: ", }

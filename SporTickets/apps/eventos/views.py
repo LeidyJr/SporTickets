@@ -11,86 +11,70 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
-from apps.eventos.forms import EventForm, EventLocationForm
-from apps.eventos.models import Event, EventLocation, Location
-from apps.boletos.models import Ticket
-from apps.ventas.models import Sale
+from apps.eventos.forms import EventoForm, LocalidadesEventoForm
+from apps.eventos.models import Evento, LocalidadesEvento, Localidad
 # Create your views here.
 
 @login_required
 def index(request):
     return render(request, 'eventos/index.html')
 
-class EventCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
-    model = Event
-    form_class = EventForm
+class CrearEvento(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    model = Evento
+    form_class = EventoForm
     template_name = "eventos/eventos_form.html"
-    success_message = "El evento %(name)s se registró correctamente."
-    success_url = reverse_lazy("eventos:locations")
+    success_message = "El evento %(nombre)s se registró correctamente."
+    success_url = reverse_lazy("eventos:localidades")
             
     def get_success_url(self):
-        return reverse_lazy("eventos:locations", kwargs={"id_evento": self.object.id})
+        return reverse_lazy("eventos:localidades", kwargs={"id_evento": self.object.id})
 
-    def get_success_message(self, cleaned_data):
-        return self.success_message % dict(
-            cleaned_data,
-            name=self.object.name,
-        )
 
-class EventList(LoginRequiredMixin, ListView):
-    model = Event
+class ListarEventos(LoginRequiredMixin, ListView):
+    model = Evento
     template_name = 'eventos/eventos_list.html'
-    queryset = Event.objects.all()
-    #filter(event_status='Activo')
-    #paginate_by = 2
+    queryset = Evento.objects.all()
 
-
-class EventUpdate(LoginRequiredMixin, UpdateView):
-    model = Event
-    form_class = EventForm
+class EditarEvento(LoginRequiredMixin, UpdateView):
+    model = Evento
+    form_class = EventoForm
     template_name = 'eventos/eventos_form.html'
     success_message = "El evento %(name)s se modificó correctamente."
-    success_url = reverse_lazy('eventos:list_event')
-
-class EventDelete(LoginRequiredMixin, DeleteView):
-    model = Event
-    template_name = 'eventos/eventos_delete.html'
-    success_url = reverse_lazy('eventos:list_event')
+    success_url = reverse_lazy('eventos:listado_de_eventos')
 
 @login_required
-def EventLocationManage(request, id_evento):
-    event = get_object_or_404(Event, pk=id_evento)#Instancia de evento, pues las EventLocation se crean/modifican dependiendo del evento.
+def AdministrarLocalidadesEvento(request, id_evento):
+    evento = get_object_or_404(Evento, pk=id_evento)
 
-    cuenta_de_localidades_del_tipo_de_evento = event.event_type.localidades_del_tipo.count()#Cuento las localidades del tipo de ese evento.
-    localidades_del_tipo_de_evento = event.event_type.localidades_del_tipo.all()#Traigo todas las localidades del tipo de ese evento.
+    cuenta_de_localidades_del_tipo_de_evento = evento.tipo_de_evento.localidades_del_tipo.count()
+    localidades_del_tipo_de_evento = evento.tipo_de_evento.localidades_del_tipo.all()
 
-    event_location_formset = modelformset_factory(EventLocation, form=EventLocationForm, max_num=cuenta_de_localidades_del_tipo_de_evento, min_num=cuenta_de_localidades_del_tipo_de_evento, extra=0)
-    #Creo un formset, va a crear objetos del tipo EvntLocation, con el formulario EventLocationForm, cantidad = cuenta de localidades de ese tipo de evento.
-    event_location_event = event.evento_localidades_del_evento.all()#Traigo todos los EventLocation del evento.
+    formset_localidades_del_evento = modelformset_factory(LocalidadesEvento, form=LocalidadesEventoForm, max_num=cuenta_de_localidades_del_tipo_de_evento, min_num=cuenta_de_localidades_del_tipo_de_evento, extra=0)
+    localidades_del_evento = evento.evento_localidades_del_evento.all()
 
-    if request.method == "POST":#Si se va a crear
-        formset = event_location_formset(request.POST, form_kwargs={'event' : event})#Le paso al formset el evento.
-        index = 0
+    if request.method == "POST":
+        formset = formset_localidades_del_evento(request.POST, form_kwargs={'evento' : evento})
+        indice = 0
         if formset.is_valid():
-            for form in formset:#Para cada formulario dentro del formset, haga lo siguiente:
-                event_location = form.save(commit=False)#Devuelve un objeto que aún no será guardado en la BD
-                event_location.event = event #El evento es el ingresado
-                event_location.location = localidades_del_tipo_de_evento[index] # Cada una de las localidades del tipo de evento
-                event_location.availability = event_location.capacity #La disponibilidad inicial,es igual a la capacidad
-                event_location.save()#Guarda el objeto en la BD
-                index += 1
-            event.save()
+            for form in formset:
+                localidad_evento = form.save(commit=False)
+                localidad_evento.evento = evento 
+                localidad_evento.localidad = localidades_del_tipo_de_evento[indice]
+                localidad_evento.disponibilidad = localidad_evento.capacidad 
+                localidad_evento.save()
+                indice += 1
+            evento.save()
             messages.success(request, 'Las localidades se registraron correctamente.')
-            return redirect('eventos:list_event')
+            return redirect('eventos:listado_de_eventos')
         else:
             messages.warning(request, 'Por favor verifique que todos los campos se hayan diligenciado correctamente.')
-    else:#Si se va a modificar
-        formset = event_location_formset(form_kwargs={'event' : event}, queryset=event_location_event)
-    formsetlocations = zip(localidades_del_tipo_de_evento, formset)
+    else:
+        formset = formset_localidades_del_evento(form_kwargs={'evento' : evento}, queryset=localidades_del_evento)
+    formset_y_localidades = zip(localidades_del_tipo_de_evento, formset)
     return render(request, "eventos/localidad_evento_form.html", {
         "formset": formset,
-        "event":event,
-        "locations":localidades_del_tipo_de_evento,
-        "formsetlocations": formsetlocations,
+        "evento":evento,
+        "localidades":localidades_del_tipo_de_evento,
+        "formset_y_localidades": formset_y_localidades,
     })
 

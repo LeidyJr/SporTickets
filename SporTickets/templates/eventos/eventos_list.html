@@ -33,22 +33,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                    {% if object_list %}
-                        {% for evento in object_list %}
+                    {% if object_list  %}
+                        {% for evento in object_list  %}
                         <tr class="table-primary">
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ evento.name }}</td>
-                            <td>{{ evento.event_type }}</td>
-                            <td>{{ evento.description }}</td>
-                            <td>{{ evento.event_date }}</td>
-                            <td>{{ evento.event_time }}</td>
-                            <td>{{ evento.event_place }}</td>
-                            <td>{{ evento.event_url }}</td>
-                            <td>{{ evento.event_status }}</td>
+                            <td>{{ evento.nombre }}</td>
+                            <td>{{ evento.tipo_de_evento }}</td>
+                            <td>{{ evento.descripcion }}</td>
+                            <td>{{ evento.fecha }}</td>
+                            <td>{{ evento.hora }}</td>
+                            <td>{{ evento.lugar }}</td>
+                            <td>{{ evento.url }}</td>
+                            <td>{{ evento.estado }}</td>
                             <td>
-                                <a class="btn btn-info" href="{% url 'eventos:locations' evento.id %}">Localidades</a>
-                                <a class="btn btn-warning" href="{% url 'eventos:update_event' evento.id %}">Editar</a>
-                                <a class="btn btn-danger" href="{% url 'eventos:delete_event' evento.id %}">Eliminar</a>
+                                <a class="btn btn-info" href="{% url 'eventos:localidades' evento.id %}">Localidades</a>
+                                <a class="btn btn-warning" href="{% url 'eventos:editar_evento' evento.id %}">Editar</a>
                             </td>
                         </tr>
                         {% endfor %}

@@ -2,65 +2,62 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-class EventType(models.Model):
+class TipoEvento(models.Model):
 
-    name = models.CharField(max_length=100, verbose_name="Event type")
+    nombre = models.CharField(max_length=100, verbose_name="Tipo de evento")
 
     def __str__(self):
-        return (self.name)
+        return (self.nombre)
 
 
-class Event(models.Model):
+class Evento(models.Model):
 
-    STATUS=(
+    ESTADO=(
 		('Activo', 'Activo'),
 		('Inactivo', 'Inactivo'),
         ('Cancelado', 'Cancelado'),
         ('Finalizado', 'Finalizado')
 		)
     
-    name = models.CharField(max_length=100, verbose_name="Event's name")
-    description = models.CharField(max_length=70, verbose_name="Event's description")
-    event_date = models.DateField()
-    event_time = models.TimeField()
-    event_place = models.CharField(max_length=100, verbose_name="Location")
-    event_url = models.URLField(max_length=100, blank=True)
-    event_status = models.CharField(max_length=20, choices=STATUS, default= 'Activo')
-    event_type= models.ForeignKey(EventType, related_name="eventos_del_tipo", on_delete=models.CASCADE)
-    #event_type.eventos_del_tipo = Todos los eventos de ese tipo de evento
+    nombre = models.CharField(max_length=100, verbose_name="Nombre del evento")
+    descripcion = models.CharField(max_length=70, verbose_name="Descripción del evento")
+    fecha = models.DateField()
+    hora = models.TimeField()
+    lugar = models.CharField(max_length=100, verbose_name="Lugar del evento")
+    url = models.URLField(max_length=100, blank=True)
+    estado = models.CharField(max_length=20, choices=ESTADO, default= 'Activo')
+    tipo_de_evento = models.ForeignKey(TipoEvento, related_name="eventos_del_tipo", on_delete=models.CASCADE)
 
     class Meta:
 
         ordering = ["id"]
 
     def __str__(self): 
-        return '%s' % (self.name)
+        return '%s' % (self.nombre)
 
+class Localidad(models.Model):
 
-class Location(models.Model):
-
-    name = models.CharField(max_length=100, verbose_name="Location's name")
-    event_type = models.ForeignKey(EventType,related_name="localidades_del_tipo",verbose_name="Event type", on_delete=models.CASCADE)
-    ##event_type.localidades_del_tipo = Todas las localidades de ese tipo de evento
-
+    nombre = models.CharField(max_length=100, verbose_name="Nombre de localidad")
+    tipo_de_evento = models.ForeignKey(TipoEvento, related_name="localidades_del_tipo",verbose_name="Tipo de evento", on_delete=models.CASCADE)
+    
     def __str__(self): 
-        return (self.name)
+        return (self.nombre)
     class Meta:
-        ordering=["name"]
+        ordering=["nombre"]
 
 
-class EventLocation(models.Model):
+class LocalidadesEvento(models.Model):
 
-    event = models.ForeignKey(Event, related_name="evento_localidades_del_evento", on_delete=models.CASCADE)
+    evento = models.ForeignKey(Evento, related_name="evento_localidades_del_evento", on_delete=models.CASCADE)
     #event.evento_localidades_del_evento = Todos los registros de EventLocation asociados a ese evento
-    location = models.ForeignKey(Location, related_name="evento_localidades_de_localidades", on_delete=models.CASCADE)
+    localidad = models.ForeignKey(Localidad, related_name="evento_localidades_de_localidades", on_delete=models.CASCADE)
     #event.evento_localidades_de_localidades = Todos los registros de EventLocation asociados a esa localidad
-    capacity = models.IntegerField()    
-    price = models.IntegerField()
-    availability = models.IntegerField()
+    capacidad = models.IntegerField()    
+    precio = models.IntegerField()
+    disponibilidad = models.IntegerField()
 
     def __str__(self): 
-        return ("%s (%s)"%(self.event, self.location))
+        return ("%s (%s)"%(self.evento, self.localidad))
 
     class Meta:
-        ordering=["location__name"]
+        ordering=["localidad__nombre"]

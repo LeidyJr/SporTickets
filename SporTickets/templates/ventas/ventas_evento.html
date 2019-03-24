@@ -10,21 +10,21 @@
 {% block content %}
 	<div class="container-fluid">
           <br/>
-          <h1 class="h3 mb-2 text-gray-800">Seleccione la cantidad de boletos a comprar para el evento {{event}}</h1>
+          <h1 class="h3 mb-2 text-gray-800">Seleccione la cantidad de boletos a comprar para el evento {{evento}}</h1>
           <br/>
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">Localidades del evento {{event}}</h6>
+              <h6 class="m-0 font-weight-bold text-primary">Localidades del evento {{evento}}</h6>
             </div>
             <div class="card-body">
 				<form method="post">{% csrf_token %}
 					<div class="row">
-						{% for locations, form in formsetlocations %}
+						{% for localidades, form in formset_y_localidades %}
 							<div class="col-sm-6 col-md-4 col-lg-3">
 								<div class="card shadow mb-4">
 									<div class="card-header py-3">
-										<h6 class="m-0 font-weight-bold text-primary">Localidad {{locations}} del evento: {{event}}.</h6>
+										<h6 class="m-0 font-weight-bold text-primary">Localidad {{localidades}} del evento: {{evento}}.</h6>
 									</div>
 									<div class="card-body">
 										{% bootstrap_form form %}

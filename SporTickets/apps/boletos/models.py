@@ -1,17 +1,17 @@
 from django.db import models
 
-from apps.eventos.models import EventLocation
-from apps.ventas.models import Sale
+from apps.eventos.models import LocalidadesEvento
+from apps.ventas.models import Venta
 
-class TicketManager(models.Manager):
-    def create_ticket(self, event_location, sale):
-        ticket = self.create(event_location=event_location)
-        return ticket
+class ManejadorBoletos(models.Manager):
+    def crear_boleto(self, localidades_evento, venta):
+        boleto = self.create(localidades_evento=localidades_evento)
+        return boleto
 
-class Ticket(models.Model):
-	sale = models.ForeignKey(Sale,related_name="boletos_de_la_venta",verbose_name="Sale", on_delete=models.CASCADE)
-	event_location = models.ForeignKey(EventLocation, related_name="boletos_de_event_location", verbose_name="EventLocation", on_delete=models.CASCADE)
-	objects = TicketManager()
+class Boleto(models.Model):
+	venta = models.ForeignKey(Venta, related_name="boletos_de_la_venta",verbose_name="Venta", on_delete=models.CASCADE)
+	localidades_evento = models.ForeignKey(LocalidadesEvento, related_name="boletos_de_event_location", verbose_name="LocalidadesEvento", on_delete=models.CASCADE)
+	objects = ManejadorBoletos()
 
 	
 	
