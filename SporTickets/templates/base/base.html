@@ -44,7 +44,7 @@
 
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
-      {% if request.user.es_vendedor %}
+      {% if request.user.es_gerente %}
       <!-- Nav Item - Dashboard -->
       <li class="nav-item">
         <a class="nav-link" href="{% url 'eventos:index' %}">
@@ -54,14 +54,24 @@
       {% endif %}
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
-
+      {% if request.user.es_cliente%}
       <!-- Nav Item - Dashboard -->
       <li class="nav-item">
         <a class="nav-link" href="{% url 'ventas:nueva_compra' %}">
           <i class="fas fa-comment-dollar"></i>
-          <span>Ventas</span></a>
+          <span>Comprar</span></a>
       </li>
-
+      {% endif %}
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+      {% if request.user.es_vendedor %}
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'ventas:nueva_venta' %}">
+          <i class="fas fa-comment-dollar"></i>
+          <span>Vender</span></a>
+      </li>
+      {% endif %}
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
       <!-- Nav Item - Event Menu -->
@@ -79,6 +89,12 @@
       </li>
       <!-- Divider -->
       <hr class="sidebar-divider">
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'logout' %}">
+          <i class="fas fa-comment-dollar"></i>
+          <span>Cerrar sesión</span></a>
+      </li>
 
 
       <!-- Sidebar Toggler (Sidebar) -->

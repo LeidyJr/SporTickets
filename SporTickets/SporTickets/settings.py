@@ -172,5 +172,5 @@ MESSAGE_TAGS = {
 SITE_ID = 1
 
 
-LOGIN_REDIRECT_URL = 'eventos:index'
+LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'login'

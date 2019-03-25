@@ -42,7 +42,7 @@
 	                        <tr class="table-primary">
 	                            <td>{{boleto.localidades_evento}}</td>
 	                            <td>{{boleto.localidades_evento.precio}}</td>
-	                            <td><a href="{% url 'ventas:eliminar_boleto' boleto.id %}" class="btn btn-danger btn-circle btn-lg">
+	                            <td><a href="{% url 'ventas:eliminar_boleto_compra' boleto.id %}" class="btn btn-danger btn-circle btn-lg">
 	                    		<i class="fas fa-trash"></i></a></td>
 	                    	</tr>
 	                    	{% endfor %}

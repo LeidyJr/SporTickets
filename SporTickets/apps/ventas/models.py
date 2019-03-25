@@ -5,8 +5,8 @@ from apps.usuarios.models import User
 
 class Venta(models.Model):
 
-    cliente = models.ForeignKey(User, related_name="compras_del_usuario", on_delete=models.CASCADE)
-    vendedor = models.CharField(max_length=100, verbose_name="Seller")
+    cliente = models.ForeignKey(User, related_name="compras_del_usuario", on_delete=models.CASCADE, null=True)
+    vendedor = models.ForeignKey(User, related_name="ventas_del_vendedor", on_delete=models.CASCADE, null=True)
     fecha = models.DateTimeField(editable=False)
     subtotal = models.IntegerField(default=0)
     iva = models.FloatField(default=0)

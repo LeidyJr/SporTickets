@@ -9,7 +9,7 @@ class SeleccionarEventoForm(forms.Form):
     evento = forms.ModelChoiceField(queryset = Evento.objects.all().filter(estado='Activo'))
     def clean_price(self):
         data = self.cleaned_data.get('evento')
-        return evento
+        return data
 
 
 class CantidadForm(forms.Form):
@@ -20,3 +20,10 @@ class CantidadForm(forms.Form):
 	 	self.evento = evento
 	 	super(CantidadForm, self).__init__(*args, **kwargs)
 
+class SeleccionarClienteForm(forms.Form):
+
+	cliente = forms.ModelChoiceField(queryset = User.objects.all().filter(es_cliente=True))
+
+	def clean_cliente(self):
+		data = self.cleaned_data.get('cliente')
+		return data

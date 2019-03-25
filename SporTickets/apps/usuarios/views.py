@@ -7,7 +7,7 @@ def es_vendedor(function):
         if request.user.es_vendedor == True:
             return function(request, *args, **kwargs)
         else:
-            return redirect('login')
+            return redirect('home')
     return wrap
 
 def es_cliente(function):
@@ -16,7 +16,7 @@ def es_cliente(function):
         if request.user.es_cliente == True:
             return function(request, *args, **kwargs)
         else:
-            return redirect('login')
+            return redirect('home')
     return wrap
 
 def es_gerente(function):
@@ -25,6 +25,6 @@ def es_gerente(function):
         if request.user.es_gerente == True:
             return function(request, *args, **kwargs)
         else:
-            return redirect('login')
+            return redirect('home')
     return wrap
 

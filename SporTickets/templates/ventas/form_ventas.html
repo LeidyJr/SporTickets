@@ -3,7 +3,7 @@
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
 {{ form.media }}
-{% block title %} Venta de boletos {% endblock %}
+{% block title %} Vender de boletos  {% endblock %}
 {% block content %}
 <div class="card shadow mb-12">
 <div class="row">
@@ -21,21 +21,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-lg-4">
-		<div class="card shadow mb-4">
-			<div class="card-header py-3">
-					<h6 class="m-0 font-weight-bold text-primary">Seleccionar cliente</h6>
-			</div>
-			<div class="card-body">
-			     <form method="post">
-					{% csrf_token %}
-					{% bootstrap_form form %}
-					<button type="submit" class="btn btn-info">Seleccionar</button>
-				</form>
-			</div>
-		</div>
-	</div>
-	<div class="col-lg-4">
+	<div class="col-lg-6">
 		<div class="card shadow mb-4">
 			<div class="card-header py-3">
 					<h6 class="m-0 font-weight-bold text-primary">Boletos a vender:</h6>
@@ -54,9 +40,9 @@
 	                    {% if venta_activa.boletos_de_la_venta.all %}
 	                        {% for boleto in venta_activa.boletos_de_la_venta.all %}
 	                        <tr class="table-primary">
-	                            <td>{{boleto.event_location}}</td>
-	                            <td>{{boleto.event_location.price}}</td>
-	                            <td><a href="{% url 'ventas:eliminar_boleto' boleto.id %}" class="btn btn-danger btn-circle btn-lg">
+	                            <td>{{boleto.localidades_evento}}</td>
+	                            <td>{{boleto.localidades_evento.precio}}</td>
+	                            <td><a href="{% url 'ventas:eliminar_boleto_venta' boleto.id %}" class="btn btn-danger btn-circle btn-lg">
 	                    		<i class="fas fa-trash"></i></a></td>
 	                    	</tr>
 	                    	{% endfor %}
@@ -73,9 +59,9 @@
 </div>
 <div class="col-lg-6">
 	{% if venta_activa.boletos_de_la_venta.all %}
-<a href="{% url 'ventas:finalizar_compra' %}" class="btn btn-success btn-icon-split">
+<a href="{% url 'ventas:finalizar_venta' %}" class="btn btn-success btn-icon-split">
 	<span class="icon text-white-50"><i class="fas fa-check"></i></span>
-    <span class="text">Finalizar compra</span>
+    <span class="text">Siguiente</span>
 </a>
 {% endif %}
 </div>
