@@ -1,14 +1,20 @@
 {% extends "base/base.html" %}
-
+{% block title %} Factura {% endblock %}
 {% block content %}
-<div class="row">
+<div class="row" id="contenedor">
   <div class="col-lg-4">
     <div class="card shadow mb-4">
       <div class="card-header py-3">
           <h6 class="m-0 font-weight-bold text-primary">Detalle Factura</h6>
       </div>
       <div class="card-body">
-        <p>Venta: {{ venta.id }}</p>
+        <p>#Factura: 000123{{ venta.id }}</p>
+        {% if venta.cliente %}
+        <p>Cliente: {{venta.cliente.first_name}} {{venta.cliente.last_name}}</p>
+        {% endif %}
+        {% if venta.vendedor %}
+        <p>Vendedor: {{venta.vendedor.first_name}} {{venta.vendedor.last_name}}</p>
+        {% endif %}
         <p>Fecha: {{venta.fecha}}</p>
         <p>Subtotal: {{venta.subtotal}}</p>
         <p>Iva: {{venta.iva|floatformat}}</p>
@@ -42,16 +48,27 @@
           </div>
         </div>
       </div>
-      {% if request.user.es_vendedor %}
+
+  </div>
+</div>
+
+{% if request.user.es_vendedor %}
       <a href="{% url 'ventas:mis_ventas' %}" class="btn btn-primary">Volver</a>
       {% endif %}
       {% if request.user.es_cliente %}
       <a href="{% url 'ventas:mis_compras' %}" class="btn btn-primary">Volver</a>
       {% endif %}
-  </div>
-</div>
+      <button onclick="imprimir()" class="btn btn-primary">Imprimir</button>
 
+{% endblock %}
 
-
-
+{% block extrajs %}
+<script>
+    function imprimir(){
+        var printContents = document.getElementById("contenedor").innerHTML;
+    document.body.innerHTML = printContents;
+    window.print();
+        location.reload();
+    }
+</script>
 {% endblock %}
