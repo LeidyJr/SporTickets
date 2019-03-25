@@ -1,0 +1,56 @@
+{% extends 'base/tables.html' %}
+{% load bootstrap4 %}
+{% block title %} Lista de clientes {% endblock %}
+
+{% block content %}
+<!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <br/>
+          <h1 class="h3 mb-2 text-gray-800">Lista de clientes</h1>
+          <br/>
+          <!-- DataTales Example -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Lista de clientes</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Usuario</th>
+                            <th scope="col">Nombres</th>
+                            <th scope="col">Apellidos</th>
+                            <th scope="col">Correo</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% if object_list  %}
+                        {% for usuario in object_list  %}
+                        <tr class="table-primary">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ usuario.username }}</td>
+                            <td>{{ usuario.first_name }}</td>
+                            <td>{{ usuario.last_name }}</td>
+                            <td>{{ usuario.email }}</td>
+                            <td>
+                                <a class="btn btn-warning" href="{% url 'usuarios:editar_usuario' usuario.id %}">Editar</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                    <h1> No hay eventos </h1>
+                    {% endif %}
+                    </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- /.container-fluid -->
+{% endblock %}

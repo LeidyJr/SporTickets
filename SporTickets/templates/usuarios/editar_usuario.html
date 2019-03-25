@@ -1,0 +1,27 @@
+{% extends 'base/base.html' %}
+{% load bootstrap4 %}
+
+{{ form_evento.media }}
+{% block title %} Editar cliente {% endblock %}
+{% block content %}
+  <div class="container-fluid">
+          <br/>
+          <h1 class="h3 mb-2 text-gray-800">Editar cliente</h1>
+          <br/>
+          <!-- DataTales Example -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Editar cliente</h6>
+            </div>
+            <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          {% bootstrap_form form %}
+          <button type="submit" class="btn btn-success">Guardar</button>
+          <a href="{% url 'usuarios:listado_de_clientes' %}" class="btn btn-primary">Volver</a>
+        </form>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

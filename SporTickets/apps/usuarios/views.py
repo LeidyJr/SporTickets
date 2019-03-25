@@ -1,5 +1,12 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView, CreateView, UpdateView
+from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from functools import wraps
+
+from apps.usuarios.forms import SignUpForm, EditUserForm
+from apps.usuarios.models import User
 
 def es_vendedor(function):
     @wraps(function)
@@ -37,12 +44,6 @@ def es_administrador(function):
             return redirect('home')
     return wrap
 
-
-from django.contrib.auth import login, authenticate
-from django.shortcuts import render, redirect
-
-from apps.usuarios.forms import SignUpForm
-
 def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -58,3 +59,18 @@ def signup(request):
     else:
         form = SignUpForm()
     return render(request, 'usuarios/signup.html', {'form': form})
+
+
+
+class ListarClientes(LoginRequiredMixin, ListView):
+    model = User
+    template_name = 'usuarios/listado_clientes.html'
+    queryset = User.objects.filter(es_cliente=True)
+
+
+class EditarCliente(LoginRequiredMixin, UpdateView):
+    model = User
+    form_class = EditUserForm
+    template_name = 'usuarios/editar_usuario.html'
+    success_message = "El usuario %(username)s se modificó correctamente."
+    success_url = reverse_lazy('usuarios:listado_de_clientes')
