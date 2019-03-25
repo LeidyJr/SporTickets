@@ -23,5 +23,6 @@ urlpatterns = [
     url(r'^factura/(?P<pk>\d+)/$', view=ver_factura, name='factura'),
 
     url(r'^mis-compras$', view=mis_compras, name='mis_compras'),
-]
+    url(r'^mis-ventas$', view=mis_ventas, name='mis_ventas'),
 
+ ]

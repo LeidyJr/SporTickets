@@ -44,6 +44,12 @@
 
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
+      <li class="nav-item">
+        <a class="nav-link" href="#">
+          <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+          <span>Hola, {{request.user}} </span></a>
+      </li>
+      
       {% if request.user.es_gerente %}
       <!-- Nav Item - Dashboard -->
       <li class="nav-item">
@@ -61,6 +67,13 @@
           <i class="fas fa-comment-dollar"></i>
           <span>Comprar</span></a>
       </li>
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'ventas:mis_compras' %}">
+          <i class="fas fa-comment-dollar"></i>
+          <span>Mis compras</span></a>
+      </li>
       {% endif %}
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
@@ -70,6 +83,13 @@
         <a class="nav-link" href="{% url 'ventas:nueva_venta' %}">
           <i class="fas fa-comment-dollar"></i>
           <span>Vender</span></a>
+      </li>
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'ventas:mis_ventas' %}">
+          <i class="fas fa-comment-dollar"></i>
+          <span>Mis ventas</span></a>
       </li>
       {% endif %}
       <!-- Divider -->

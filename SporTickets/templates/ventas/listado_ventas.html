@@ -1,6 +1,6 @@
 {% extends 'base/tables.html' %}
 {% load bootstrap4 %}
-{% block title %} Lista de compras {% endblock %}
+{% block title %} Lista de ventas {% endblock %}
 
 {% block content %}
 <!-- Begin Page Content -->
@@ -8,12 +8,12 @@
 
           <!-- Page Heading -->
           <br/>
-          <h1 class="h3 mb-2 text-gray-800">Mis compras</h1>
+          <h1 class="h3 mb-2 text-gray-800">Mis ventas</h1>
           <br/>
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">Mis compras</h6>
+              <h6 class="m-0 font-weight-bold text-primary">Mis ventas</h6>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -24,24 +24,26 @@
                             <th scope="col">Fecha</th>
                             <th scope="col">Vendedor</th>
                             <th scope="col">Total</th>
+                            <th scope="col">Cliente</th>
                             <th scope="col">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                    {% if compras %}
-                        {% for compra in compras %}
+                    {% if ventas %}
+                        {% for venta in ventas %}
                         <tr class="table-primary">
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ compra.fecha }}</td>
-                            <td>{{ compra.vendedor }}</td>
-                            <td>{{ compra.total }}</td>
+                            <td>{{ venta.fecha }}</td>
+                            <td>{{ venta.vendedor }}</td>
+                            <td>{{ venta.total }}</td>
+                            <td>{{ venta.cliente }}</td>
                             <td>
-                                <a class="btn btn-info" href="{% url 'ventas:factura' compra.id %}">Ver factura</a>
+                                <a class="btn btn-info" href="{% url 'ventas:factura' venta.id %}">Ver factura</a>
                             </td>
                         </tr>
                         {% endfor %}
                     {% else %}
-                    <h1> No hay compras </h1>
+                    <h1> No hay ventas </h1>
                     {% endif %}
                     </tbody>
                 </table>

@@ -42,6 +42,12 @@
           </div>
         </div>
       </div>
+      {% if request.user.es_vendedor %}
+      <a href="{% url 'ventas:mis_ventas' %}" class="btn btn-primary">Volver</a>
+      {% endif %}
+      {% if request.user.es_cliente %}
+      <a href="{% url 'ventas:mis_compras' %}" class="btn btn-primary">Volver</a>
+      {% endif %}
   </div>
 </div>
 

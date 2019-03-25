@@ -248,27 +248,8 @@ def eliminar_boleto_venta(request, id_boleto):
         messages.success(request, 'Boleto eliminado exitosamente.')
     return redirect("ventas:nueva_venta")
 
-
-# @login_required
-# @es_vendedor
-# def finalizar_venta(request):
-#     from django.db.models import Sum
-#     from django.db.models.functions import Coalesce
-
-#     venta_activa = Venta.obtener_venta(request)
-#     boletos = venta_activa.boletos_de_la_venta.all()
-
-#     subtotal = boletos.aggregate(calc_subtotal=Coalesce(Sum("localidades_evento__precio"),0))["calc_subtotal"]
-#     iva = subtotal*0.19
-#     total = subtotal + iva
-
-#     venta_activa.cliente = cliente
-#     venta_activa.subtotal = subtotal
-#     venta_activa.iva = iva
-#     venta_activa.total = total
-#     venta_activa.terminada = True
-#     venta_activa.save()
-#     del request.session['venta_activa']
-#     messages.success(request, 'Venta realizada exitosamente.')
-#     return redirect('ventas:factura', venta_activa.id)
-
+@login_required
+@es_vendedor
+def mis_ventas(request):
+    ventas = request.user.ventas_del_vendedor.filter(terminada=True)
+    return render(request, 'ventas/listado_ventas.html',{'ventas':ventas})
