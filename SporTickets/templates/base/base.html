@@ -35,15 +35,12 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href=" {% static 'index.html">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
         <div class="sidebar-brand-icon rotate-n-15">
           <i class="fas fa-ticket-alt"></i>
         </div>
         <div class="sidebar-brand-text mx-3">SporTickets </div>
       </a>
-
-      <!-- Divider -->
-      <hr class="sidebar-divider my-0">
       <li class="nav-item">
         <a class="nav-link" href="#">
           <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -103,7 +100,9 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <a class="collapse-item" href="{% url 'eventos:listado_de_eventos' %}">Listado de eventos</a>
+            {% if request.user.es_administrador %}
             <a class="collapse-item" href="{% url 'eventos:registrar_evento' %}">Registrar</a>
+            {% endif %}
           </div>
         </div>
       </li>

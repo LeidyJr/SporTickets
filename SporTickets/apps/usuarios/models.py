@@ -8,6 +8,7 @@ class User(AbstractUser):
     es_vendedor = models.BooleanField(default=False)
     es_cliente = models.BooleanField(default=False)
     es_gerente = models.BooleanField(default=False)
+    es_administrador = models.BooleanField(default=False)
 
 
     def obtener_perfil_vendedor(self):
@@ -28,6 +29,12 @@ class User(AbstractUser):
             obtener_perfil_gerente = self.perfilgerente
         return obtener_perfil_gerente
 
+    def obtener_perfil_administrador(self):
+        obtener_perfil_administrador = None
+        if hasattr(self, 'perfiladministrador'):
+            obtener_perfil_administrador = self.perfiladministrador
+        return obtener_perfil_administrador
+
     class Meta:
         db_table = 'auth_user'
 
@@ -46,6 +53,12 @@ class PerfilCliente(models.Model):
     cedula = models.CharField(max_length=10, unique=True)
 
 class PerfilGerente(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    active = models.BooleanField(default=True)
+    name = models.CharField(max_length=64)
+    cedula = models.CharField(max_length=10, unique=True)
+
+class perfiladministrador(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     active = models.BooleanField(default=True)
     name = models.CharField(max_length=64)

@@ -13,11 +13,13 @@ from django.contrib import messages
 
 from apps.eventos.forms import EventoForm, LocalidadesEventoForm
 from apps.eventos.models import Evento, LocalidadesEvento, Localidad
+from apps.usuarios.views import es_administrador
 # Create your views here.
 
 @login_required
 def index(request):
     return render(request, 'eventos/index.html')
+
 
 class CrearEvento(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Evento
@@ -29,11 +31,11 @@ class CrearEvento(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     def get_success_url(self):
         return reverse_lazy("eventos:localidades", kwargs={"id_evento": self.object.id})
 
-
 class ListarEventos(LoginRequiredMixin, ListView):
     model = Evento
     template_name = 'eventos/eventos_list.html'
     queryset = Evento.objects.all()
+
 
 class EditarEvento(LoginRequiredMixin, UpdateView):
     model = Evento
@@ -42,7 +44,9 @@ class EditarEvento(LoginRequiredMixin, UpdateView):
     success_message = "El evento %(name)s se modificó correctamente."
     success_url = reverse_lazy('eventos:listado_de_eventos')
 
+
 @login_required
+@es_administrador
 def AdministrarLocalidadesEvento(request, id_evento):
     evento = get_object_or_404(Evento, pk=id_evento)
 

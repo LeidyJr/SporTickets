@@ -13,7 +13,7 @@ from apps.boletos.models import Boleto
 from apps.ventas.models import Venta
 from apps.usuarios.models import User
 from apps.eventos.models import Evento, LocalidadesEvento
-from apps.usuarios.views import es_vendedor, es_cliente
+from apps.usuarios.views import es_vendedor, es_cliente, es_gerente, es_administrador
 from apps.ventas.forms import SeleccionarEventoForm, CantidadForm, SeleccionarClienteForm
 
 @login_required

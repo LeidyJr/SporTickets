@@ -27,9 +27,11 @@
                             <th scope="col">Fecha</th>
                             <th scope="col">Hora</th>
                             <th scope="col">Lugar</th>
+                            {% if request.user.es_administrador %}
                             <th scope="col">URL</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Acciones</th>
+                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
@@ -43,12 +45,14 @@
                             <td>{{ evento.fecha }}</td>
                             <td>{{ evento.hora }}</td>
                             <td>{{ evento.lugar }}</td>
+                            {% if request.user.es_administrador %}
                             <td>{{ evento.url }}</td>
                             <td>{{ evento.estado }}</td>
                             <td>
                                 <a class="btn btn-info" href="{% url 'eventos:localidades' evento.id %}">Localidades</a>
                                 <a class="btn btn-warning" href="{% url 'eventos:editar_evento' evento.id %}">Editar</a>
                             </td>
+                            {% endif %}
                         </tr>
                         {% endfor %}
                     {% else %}

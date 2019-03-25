@@ -18,14 +18,14 @@ from django.urls import path
 from django.conf.urls import url, include
 from django.contrib.auth import views
 
-from apps.eventos.views import index
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('eventos/', include ('apps.eventos.urls', namespace='eventos')),
     path('ventas/', include ('apps.ventas.urls', namespace='ventas')),
+    path('usuarios/', include ('apps.usuarios.urls', namespace='usuarios')),
 
-    path('', index, name='home' ),
+    path('', views.LoginView.as_view(), name='home' ),
 
     path('login/', views.LoginView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
