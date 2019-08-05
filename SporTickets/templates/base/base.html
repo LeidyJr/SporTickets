@@ -48,15 +48,21 @@
       </li>
       
       {% if request.user.es_gerente %}
-      <!-- Nav Item - Dashboard -->
+      <!-- Nav Item - Event Menu -->
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'eventos:index' %}">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Tablero de control</span></a>
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+          <i class="far fa-calendar-check"></i>
+          <span>Reportes</span>
+        </a>
+        <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <a class="collapse-item" href="{% url 'reportes:boletos_por_evento' %}">Boletos por evento</a>
+            <a class="collapse-item" href="{% url 'reportes:ventas_por_vendedor' %}">Ventas por vendedor</a>
+          </div>
+        </div>
       </li>
       {% endif %}
-      <!-- Divider -->
-      <hr class="sidebar-divider my-0">
+
       {% if request.user.es_cliente%}
       <!-- Nav Item - Dashboard -->
       <li class="nav-item">

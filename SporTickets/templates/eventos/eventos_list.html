@@ -66,4 +66,48 @@
 
         </div>
         <!-- /.container-fluid -->
+
+{% for evento_proveedor in eventos_proveedores %}
+<div class="row">
+            <div class="container-fluid">
+            <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Lista de eventos del proveedor: {{ forloop.counter }}</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Hora</th>
+                            <th scope="col">Lugar</th>
+                            <th scope="col">Url</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                  {% for evento in evento_proveedor.data %}
+                        <tr class="table-primary">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ evento.nombre }}</td>
+                            <td>{{ evento.fecha }}</td>
+                            <td>{{ evento.hora }}</td>
+                            <td>{{ evento.lugar }}</td>
+                            <td><a target="_blank" href="{{evento.url}}" class="btn btn-secondary">Ir a la pagina</a></td>
+                        </tr>
+                    </tbody>
+                  {% endfor %}
+              </table>
+          </div>
+      </div>
+  </div>
+</div>
+</div>
+{% endfor %}
+
+
+
 {% endblock %}

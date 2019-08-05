@@ -1,24 +1,46 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect, Http404, JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.forms.models import modelformset_factory
-from django.http import HttpResponseRedirect, Http404
 from django.db import IntegrityError
-from django.forms import modelformset_factory
+from django.db.models import Avg, Max, Min, Sum
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+from django.urls import reverse
+
+from rest_framework import generics
 
 from apps.eventos.forms import EventoForm, LocalidadesEventoForm
-from apps.eventos.models import Evento, LocalidadesEvento, Localidad
+from apps.eventos.models import Evento, LocalidadesEvento, Localidad, ProveedorEventos
+from apps.eventos.serializers import EventoSerializer
 from apps.usuarios.views import es_administrador
-# Create your views here.
+
+import requests
 
 @login_required
 def index(request):
     return render(request, 'eventos/index.html')
+
+def obtener_eventos():
+    proveedores = ProveedorEventos.objects.all()
+    eventos_proveedores = []
+    for proveedor in proveedores:
+        api_url = proveedor.api_url
+        try:
+            print(api_url)
+            resp = requests.get(url=str(api_url), params={})
+            print(resp)
+        except requests.exceptions.RequestException as e:
+            print("para la url " + api_url + ": ")
+            print(e)
+            resp = None
+        if resp != None:
+            data = resp.json()
+            eventos_proveedores.append({"proveedor_nombre":proveedor.nombre, "proveedor_id":proveedor.id, "data" : data})
+    return eventos_proveedores
 
 
 class CrearEvento(LoginRequiredMixin, SuccessMessageMixin, CreateView):
@@ -36,6 +58,10 @@ class ListarEventos(LoginRequiredMixin, ListView):
     template_name = 'eventos/eventos_list.html'
     queryset = Evento.objects.all()
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['eventos_proveedores'] = obtener_eventos()
+        return context
 
 class EditarEvento(LoginRequiredMixin, UpdateView):
     model = Evento
@@ -81,4 +107,35 @@ def AdministrarLocalidadesEvento(request, id_evento):
         "localidades":localidades_del_tipo_de_evento,
         "formset_y_localidades": formset_y_localidades,
     })
+
+
+def eventos_json(request):
+    print("X")
+    json = []
+    eventos = Evento.objects.filter(fecha__month=3, fecha__year=2019)
+    URL_SERVIDOR = "http://localhost:8000"
+    for evento in eventos:
+        evento_json = {}
+        evento_json["nombre"] = evento.nombre
+        evento_json["fecha"] = evento.fecha.strftime('%Y-%m-%d')
+        evento_json["hora"] = evento.hora.strftime('%H:%M')
+        evento_json["lugar"] = evento.lugar
+        evento_json["url"] = URL_SERVIDOR + reverse("ventas:comprar", kwargs={'id_evento':evento.id})
+        
+        evento_localidades_del_evento = evento.evento_localidades_del_evento.all()
+        minimo = evento_localidades_del_evento.aggregate(Min('precio'))["precio__min"]
+        maximo = evento_localidades_del_evento.aggregate(Max('precio'))["precio__max"]
+        boletos_disponibles = evento_localidades_del_evento.aggregate(Sum('disponibilidad'))["disponibilidad__sum"]
+        if minimo == None:
+            minimo = 0
+        if maximo == None:
+            maximo = 0
+        evento_json["valor_minimo"] = str(minimo)
+        evento_json["valor_maximo"] = str(maximo)
+        evento_json["boletos_disponibles"] = str(boletos_disponibles)
+        json.append(evento_json)
+    print("y")
+    return JsonResponse(json, safe=False, json_dumps_params={'ensure_ascii':False})
+
+
 

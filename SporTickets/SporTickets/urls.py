@@ -24,6 +24,7 @@ urlpatterns = [
     path('eventos/', include ('apps.eventos.urls', namespace='eventos')),
     path('ventas/', include ('apps.ventas.urls', namespace='ventas')),
     path('usuarios/', include ('apps.usuarios.urls', namespace='usuarios')),
+    path('reportes/', include ('apps.reportes.urls', namespace='reportes')),
 
     path('', views.LoginView.as_view(), name='home' ),
 

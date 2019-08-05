@@ -58,7 +58,7 @@
       {% if request.user.es_cliente %}
       <a href="{% url 'ventas:mis_compras' %}" class="btn btn-primary">Volver</a>
       {% endif %}
-      <button onclick="imprimir()" class="btn btn-primary">Imprimir</button>
+      <button onclick="imprimir()" class="btn btn-info" ><i class="fas fa-download fa-sm text-white-50"></i> Imprimir</button>
 
 {% endblock %}
 

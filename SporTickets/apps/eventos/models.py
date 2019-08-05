@@ -35,6 +35,13 @@ class Evento(models.Model):
     def __str__(self): 
         return '%s' % (self.nombre)
 
+# @staticmethod
+#     def crear_eventos():
+#         if Mascota.objects.all().count() == 0:
+#             Mascota.objects.create(nombre="Pepe", raza=Mascota.RAZAS[2][0], ano_nacimiento=2010)
+#             Mascota.objects.create(nombre="Max", raza=Mascota.RAZAS[0][0], ano_nacimiento=2015)
+#             Mascota.objects.create(nombre="Niña", raza=Mascota.RAZAS[1][0], ano_nacimiento=2018)
+
 class Localidad(models.Model):
 
     nombre = models.CharField(max_length=100, verbose_name="Nombre de localidad")
@@ -61,3 +68,8 @@ class LocalidadesEvento(models.Model):
 
     class Meta:
         ordering=["localidad__nombre"]
+
+
+class ProveedorEventos(models.Model):
+    nombre = models.CharField(max_length = 300)
+    api_url = models.CharField(max_length = 300)

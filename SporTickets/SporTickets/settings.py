@@ -26,7 +26,7 @@ SECRET_KEY = 'q8t)ylnh86d8c^-ucef0^p0aa$qt4du7m#lnc5(@^$p+!%tl!)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 
 
 # Application definition
@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
+    'rest_framework',
+    'chartjs',
 ]
 
 AUTH_USER_MODEL = 'usuarios.User'

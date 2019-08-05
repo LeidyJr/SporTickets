@@ -38,10 +38,11 @@
                 <h1 class="h4 text-gray-900 mb-4">Crea tu cuenta</h1>
               </div>  
               <form method="post">
-			    {% csrf_token %}
-			    {% bootstrap_form form %}
-			    <button type="submit" class="btn btn-success">Sign up</button>
-			  </form>
+      			    {% csrf_token %}
+                {% include 'base/messages.html' %}
+      			    {% bootstrap_form form %}
+      			    <button type="submit" class="btn btn-success">Sign up</button>
+      			  </form>
               <hr>
               <div class="text-center">
                 <a class="small" href="{% url 'login' %}">Tienes una cuenta? Inicia sesión</a>
